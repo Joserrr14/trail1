@@ -4,34 +4,205 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Envelope Invitation</title>
-  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Reset & full viewport */
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100vw;
+      height: 100dvh; /* dynamic viewport for iOS */
+      overflow: hidden;
+      background: #2d2d4d;
+    }
+
+    /* Envelope container */
+    .envelope {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100dvh;
+      cursor: pointer;
+      perspective: 1400px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: visible;
+    }
+
+    /* Envelope body */
+    .body {
+      position: absolute;
+      inset: 0;
+      background: url('assets/image1.jpg') center / cover no-repeat;
+      z-index: 1;
+    }
+
+    /* Flap */
+    .flap {
+      position: absolute;
+      inset: 0;
+      background: url('assets/image1.jpg') center / cover no-repeat;
+      clip-path: polygon(0 0, 100% 0, 85% 45%, 50% 62%, 15% 45%);
+      transform-origin: top center;
+      transition: transform 0.9s cubic-bezier(0.4, 0.2, 0.2, 1);
+      z-index: 3;
+      backface-visibility: hidden;
+    }
+
+    .flap::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      clip-path: inherit;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.25), rgba(0,0,0,0.05) 40%, transparent);
+      pointer-events: none;
+    }
+
+    /* Blur behind letter */
+    .blur-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100dvh;
+      backdrop-filter: blur(8px);
+      opacity: 0;
+      transition: opacity 0.8s ease;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    /* Letter container */
+    .letter {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100dvh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transform: translateY(100dvh);
+      transition: transform 4s cubic-bezier(0.22, 0.61, 0.36, 1);
+      z-index: 4;
+      pointer-events: none;
+    }
+
+    /* Letter image base */
+    .letter img {
+      transition: transform 0.4s ease;
+    }
+
+    /* Phones: full screen */
+    @media (max-width: 767px) {
+      .letter,
+      .letter img {
+        width: 100vw;
+        height: 100dvh;
+        top: 0;
+        left: 0;
+      }
+      .letter img {
+        object-fit: cover;
+        transform: none;
+      }
+    }
+
+    /* Laptops: contain inside viewport */
+    @media (min-width: 768px) {
+      .letter img {
+        width: auto;
+        height: auto;
+        max-width: 85vw;
+        max-height: 85vh;
+        object-fit: contain;
+      }
+    }
+
+    /* Open state */
+    .envelope.open .letter {
+      transform: translateY(0);
+    }
+  </style>
 </head>
 <body>
 
-<!-- Envelope container -->
 <div id="envelope" class="envelope">
-
-  <!-- Flap (top part of same image) -->
   <div class="flap"></div>
-
-  <!-- Envelope body -->
   <div class="body"></div>
-
-  <!-- Letter -->
+  <div class="blur-bg"></div>
   <div class="letter">
     <img src="assets/image2.jpg" alt="Save the Date">
   </div>
-
-  <!-- Optional blur behind letter -->
-  <div class="blur-bg"></div>
-
 </div>
 
-<!-- Background music -->
 <audio id="bgMusic" src="assets/music.mp3" loop></audio>
 
-<!-- Script -->
-<script src="script.js"></script>
+<script>
+  const envelope = document.getElementById("envelope");
+  const flap = document.querySelector(".flap");
+  const letter = document.querySelector(".letter");
+  const letterImg = document.querySelector(".letter img");
+  const blur = document.querySelector(".blur-bg");
+  const music = document.getElementById("bgMusic");
+
+  let isOpen = false;
+  const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+  envelope.addEventListener("click", () => {
+    if (!isOpen) openEnvelope();
+    else closeEnvelope();
+  });
+
+  function openEnvelope() {
+    isOpen = true;
+
+    flap.style.transform = "rotateX(160deg)";
+    blur.style.opacity = "1";
+    envelope.classList.add("open");
+
+    letter.style.transition = isMobile
+      ? "transform 4s cubic-bezier(0.22,0.61,0.36,1)"
+      : "transform 1.5s ease-in-out";
+    letter.style.transform = "translateY(0)";
+
+    if (music.duration > 35) music.currentTime = 35;
+    music.play().catch(()=>{});
+
+    if (!isMobile) {
+      letterImg.style.transition = "transform 2.5s cubic-bezier(0.22,1,0.36,1)";
+      letterImg.style.transformOrigin = "50% 50%";
+      letterImg.style.transform = "scale(1.1)";
+    } else {
+      letterImg.style.transform = "scale(1)";
+    }
+
+    if (navigator.vibrate) navigator.vibrate(10);
+  }
+
+  function closeEnvelope() {
+    isOpen = false;
+
+    flap.style.transform = "rotateX(0deg)";
+    blur.style.opacity = "0";
+
+    letter.style.transition = isMobile
+      ? "transform 4s cubic-bezier(0.22,0.61,0.36,1)"
+      : "transform 1.5s ease-in-out";
+    letter.style.transform = "translateY(100dvh)";
+
+    if (!isMobile) {
+      letterImg.style.transition = "transform 0.4s ease";
+      letterImg.style.transform = "scale(1)";
+    }
+
+    envelope.classList.remove("open");
+
+    music.pause();
+    music.currentTime = 0;
+  }
+</script>
 
 </body>
 </html>

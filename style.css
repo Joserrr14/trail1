@@ -44,7 +44,7 @@ html, body {
   z-index: 3;
 }
 
-/* Blur background behind letter */
+/* Blur behind letter */
 .blur-bg {
   position: absolute;
   top: 0;
@@ -60,20 +60,20 @@ html, body {
   z-index: 2;
 }
 
-/* Letter container (fully responsive) */
+/* Letter container - fully fits screen on all devices */
 .letter {
   position: absolute;
-  top: 0;           /* start at top */
+  top: 0;
   left: 0;
-  width: 100vw;     /* full viewport width */
-  height: 100vh;    /* full viewport height */
+  width: 100vw;
+  height: 100vh;
   z-index: 4;
   pointer-events: none;
   display: flex;
   justify-content: center;
   align-items: center;
-  transform: translateY(100%); /* start below envelope */
-  transition: transform 4s cubic-bezier(0.22, 0.61, 0.36, 1); /* slow smooth slipout on mobile */
+  transform: translateY(100vh); /* start fully below viewport */
+  transition: transform 4s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 /* Letter image fully fits */
@@ -84,10 +84,10 @@ html, body {
   transition: transform 0.4s ease;
 }
 
-/* Desktop / laptop: fit entire letter without cropping */
+/* Desktop/laptop: fit letter without cropping */
 @media (min-width: 768px) {
   .letter img {
-    object-fit: contain; /* show full letter inside viewport */
+    object-fit: contain; /* full letter inside viewport */
   }
 }
 
@@ -97,7 +97,7 @@ html, body {
 }
 
 .envelope.open .letter {
-  transform: translateY(0); /* bring letter fully into view */
+  transform: translateY(0); /* fully visible */
 }
 
 .envelope.open .blur-bg {

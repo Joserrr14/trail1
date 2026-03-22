@@ -6,8 +6,6 @@ const blur = document.querySelector(".blur-bg");
 const music = document.getElementById("bgMusic");
 
 let isOpen = false;
-
-// Detect mobile devices (iOS included)
 const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
 envelope.addEventListener("click", () => {
@@ -22,26 +20,25 @@ function openEnvelope() {
   blur.style.opacity = "1";
   envelope.classList.add("open");
 
-  // Slipout duration: mobile slow, desktop faster
   letter.style.transition = isMobile
-    ? "transform 4s cubic-bezier(0.22, 0.61, 0.36, 1)"
+    ? "transform 4s cubic-bezier(0.22,0.61,0.36,1)"
     : "transform 1.5s ease-in-out";
-  letter.style.transform = "translateY(0)"; // slide into view
+  letter.style.transform = isMobile
+    ? "translateY(0)"          // mobile uses full viewport
+    : "translate(-50%,0)";    // desktop centered with translateX(-50%)
 
   // Music at 35s
   if (music.duration > 35) music.currentTime = 35;
-  music.play().catch(() => {});
+  music.play().catch(()=>{});
 
-  // Desktop zoom only
+  // Zoom desktop only
   if (!isMobile) {
     letterImg.style.transition = "transform 2.5s cubic-bezier(0.22,1,0.36,1)";
     letterImg.style.transformOrigin = "50% 50%";
     letterImg.style.transform = "scale(1.1)";
   } else {
-    letterImg.style.transform = "scale(1)"; // mobile/iOS: no zoom
+    letterImg.style.transform = "scale(1)";
   }
-
-  if (navigator.vibrate) navigator.vibrate(10);
 }
 
 function closeEnvelope() {
@@ -51,9 +48,11 @@ function closeEnvelope() {
   blur.style.opacity = "0";
 
   letter.style.transition = isMobile
-    ? "transform 4s cubic-bezier(0.22, 0.61, 0.36, 1)"
+    ? "transform 4s cubic-bezier(0.22,0.61,0.36,1)"
     : "transform 1.5s ease-in-out";
-  letter.style.transform = "translateY(100dvh)"; // slide letter fully offscreen
+  letter.style.transform = isMobile
+    ? "translateY(100%)"
+    : "translate(-50%,100%)";
 
   if (!isMobile) {
     letterImg.style.transition = "transform 0.4s ease";
@@ -61,7 +60,6 @@ function closeEnvelope() {
   }
 
   envelope.classList.remove("open");
-
   music.pause();
   music.currentTime = 0;
 }

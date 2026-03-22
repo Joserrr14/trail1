@@ -9,23 +9,17 @@ let currentY = 0;
 let progress = 0;
 let isDragging = false;
 let isOpen = false;
-let hasStartedMusic = false;
 let motionEnabled = false;
 
 // SETTINGS
-const DRAG_RANGE = 300;
-const OPEN_THRESHOLD = 0.35;
-
-// ZOOM TARGET (adjust this!)
-const ZOOM_SCALE = 1.25;
-const ZOOM_X = 50;
-const ZOOM_Y = 35;
-
-// PARALLAX SETTINGS
-const TILT_STRENGTH = 12; // max tilt in degrees
+const DRAG_RANGE = 300;           // drag distance to fully open
+const OPEN_THRESHOLD = 0.35;      // % needed to trigger open
+const ZOOM_SCALE = 1.25;          // scale for auto-focus
+const ZOOM_X = 50;                // horizontal zoom focus %
+const ZOOM_Y = 35;                // vertical zoom focus %
+const TILT_STRENGTH = 12;         // max parallax tilt degrees
 
 /* ------------------ GESTURE ------------------ */
-
 envelope.addEventListener("pointerdown", (e) => {
   if (isOpen) return;
   isDragging = true;
@@ -44,12 +38,6 @@ envelope.addEventListener("pointermove", (e) => {
 
   flap.style.transform = `rotateX(${eased * 160}deg)`;
   letter.style.transform = `translateY(${(1 - eased) * 100}%)`;
-
-  if (!hasStartedMusic && progress > 0.05) {
-    music.play().then(() => {
-      hasStartedMusic = true;
-    }).catch(() => {});
-  }
 });
 
 envelope.addEventListener("pointerup", () => {
@@ -64,8 +52,8 @@ envelope.addEventListener("pointerup", () => {
 });
 
 /* ------------------ OPEN / CLOSE ------------------ */
-
 function openEnvelope() {
+  if (isOpen) return;
   isOpen = true;
 
   flap.style.transition = "transform 0.6s cubic-bezier(0.22, 1, 0.36, 1)";
@@ -76,32 +64,46 @@ function openEnvelope() {
 
   envelope.classList.add("open");
 
+  // Start music at 35 seconds
+  if (music.duration > 35) {
+    music.currentTime = 35;
+  }
+  music.play().catch(() => {});
+
+  // Haptic feedback
   if (navigator.vibrate) navigator.vibrate(10);
 
-  // Start zoom
+  // Auto zoom after 500ms
   setTimeout(startZoom, 500);
 
-  // Enable parallax (ask permission on iOS)
+  // Enable parallax tilt
   enableMotion();
 }
 
 function closeEnvelope() {
+  if (!isOpen) return;
+  isOpen = false;
+
   flap.style.transition = "transform 0.4s ease";
   letter.style.transition = "transform 0.4s ease";
 
   flap.style.transform = "rotateX(0deg)";
   letter.style.transform = "translateY(100%)";
 
+  letterImg.style.transition = "transform 0.4s ease";
   letterImg.style.transform = "scale(1)";
   letterImg.style.transformOrigin = "center";
 
   envelope.classList.remove("open");
 
+  // Stop music
+  music.pause();
+  music.currentTime = 0;
+
   progress = 0;
 }
 
 /* ------------------ ZOOM ------------------ */
-
 function startZoom() {
   letterImg.style.transition = "transform 2.5s cubic-bezier(0.22, 1, 0.36, 1)";
   letterImg.style.transformOrigin = `${ZOOM_X}% ${ZOOM_Y}%`;
@@ -109,19 +111,14 @@ function startZoom() {
 }
 
 /* ------------------ PARALLAX TILT ------------------ */
-
 function enableMotion() {
   if (motionEnabled) return;
 
-  // iOS requires permission
   if (typeof DeviceOrientationEvent !== "undefined" &&
       typeof DeviceOrientationEvent.requestPermission === "function") {
-
     DeviceOrientationEvent.requestPermission()
       .then((response) => {
-        if (response === "granted") {
-          startParallax();
-        }
+        if (response === "granted") startParallax();
       })
       .catch(() => {});
   } else {
@@ -135,10 +132,9 @@ function startParallax() {
   window.addEventListener("deviceorientation", (e) => {
     if (!isOpen) return;
 
-    const tiltX = e.beta;  // front/back
-    const tiltY = e.gamma; // left/right
+    const tiltX = e.beta;  // front/back tilt
+    const tiltY = e.gamma; // left/right tilt
 
-    // normalize values
     const rotateX = (tiltX / 45) * TILT_STRENGTH;
     const rotateY = (tiltY / 45) * TILT_STRENGTH;
 
@@ -151,7 +147,6 @@ function startParallax() {
 }
 
 /* ------------------ PREVENT SCROLL DURING DRAG ------------------ */
-
 document.addEventListener("touchmove", (e) => {
   if (isDragging) e.preventDefault();
 }, { passive: false });

@@ -7,7 +7,7 @@ const music = document.getElementById("bgMusic");
 
 let isOpen = false;
 
-// Detect mobile devices
+// Detect mobile devices (iOS included)
 const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
 envelope.addEventListener("click", () => {
@@ -38,7 +38,7 @@ function openEnvelope() {
     letterImg.style.transformOrigin = "50% 50%";
     letterImg.style.transform = "scale(1.1)";
   } else {
-    letterImg.style.transform = "scale(1)"; // mobile: no zoom
+    letterImg.style.transform = "scale(1)"; // mobile/iOS: no zoom
   }
 
   if (navigator.vibrate) navigator.vibrate(10);
@@ -53,7 +53,7 @@ function closeEnvelope() {
   letter.style.transition = isMobile
     ? "transform 4s cubic-bezier(0.22, 0.61, 0.36, 1)"
     : "transform 1.5s ease-in-out";
-  letter.style.transform = "translateY(100vh)";
+  letter.style.transform = "translateY(100dvh)"; // slide letter fully offscreen
 
   if (!isMobile) {
     letterImg.style.transition = "transform 0.4s ease";

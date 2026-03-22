@@ -5,30 +5,29 @@ html, body {
   width: 100%;
   height: 100%;
   overflow: hidden;
-}
-
-body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  font-family: sans-serif;
   background: #2d2d4d;
 }
 
+/* Envelope container */
 .envelope {
   position: fixed;
   inset: 0;
   perspective: 1400px;
   cursor: pointer;
+  pointer-events: auto; /* ensure envelope receives clicks */
 }
 
 /* Envelope background & flap */
-.body, .flap {
+.body,
+.flap {
   position: fixed;
   inset: 0;
   background-image: url("assets/image1.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  pointer-events: none; /* children don’t block clicks */
 }
 
 .flap {
@@ -60,13 +59,14 @@ body {
   justify-content: center;
   align-items: center;
   transform: translateY(100%);
+  pointer-events: none; /* don’t block clicks */
 }
 
 /* Letter image fully responsive, no cropping */
 .letter img {
   width: 100%;
   height: 100%;
-  object-fit: contain; /* ensures entire letter fits on screen */
+  object-fit: contain; /* entire letter fits on screen */
 }
 
 /* Open state */

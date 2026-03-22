@@ -28,19 +28,19 @@ function openEnvelope() {
   } else {
     letter.style.transition = "transform 1.5s ease-in-out";
   }
-  letter.style.transform = "translateY(0)"; // bring letter fully into view
+  letter.style.transform = "translateY(0)"; // fully visible
 
   // Music starts at 35s
   if (music.duration > 35) music.currentTime = 35;
   music.play().catch(() => {});
 
-  // Desktop zoom
+  // Desktop zoom, no zoom on mobile
   if (!isMobile) {
     letterImg.style.transition = "transform 2.5s cubic-bezier(0.22,1,0.36,1)";
-    letterImg.style.transformOrigin = "50% 35%";
-    letterImg.style.transform = "scale(1.25)";
+    letterImg.style.transformOrigin = "50% 50%";
+    letterImg.style.transform = "scale(1.1)"; // slight zoom on desktop
   } else {
-    letterImg.style.transform = "scale(1)"; // mobile: no zoom
+    letterImg.style.transform = "scale(1)"; // no zoom on mobile
   }
 
   if (navigator.vibrate) navigator.vibrate(10);

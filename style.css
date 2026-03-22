@@ -1,71 +1,36 @@
-/* Page */
-body {
-  margin: 0;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #2d2d4d;
-}
-
-/* Envelope container */
-.envelope {
-  position: relative;
-  width: 90vw;
-  max-width: 420px;
-  aspect-ratio: 3 / 4; /* keeps shape perfect */
-  cursor: pointer;
-}
-
-/* Envelope image fills container */
-.envelope-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 12px;
-  display: block;
-}
-
-/* Flap (fake top piece) */
+/* Real triangular flap */
 .flap {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 50%;
-  background: inherit;
+  height: 55%;
+  
+.flap::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 20px;
+  background: rgba(0,0,0,0.2);
+  filter: blur(8px);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.envelope.open .flap::after {
+  opacity: 1;
+}
+  
+  /* Triangle shape */
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  
+  /* Match envelope color (slightly darker for realism) */
+  background: linear-gradient(to bottom, #f5e6cc, #e0c9a6);
+  
   transform-origin: top;
   transition: transform 0.8s ease;
   z-index: 3;
-}
-
-/* Letter (hidden inside) */
-.letter {
-  position: absolute;
-  left: 50%;
-  bottom: 0;
-  transform: translate(-50%, 100%);
-  width: 85%;
-  height: 85%;
-  background: white;
-  border-radius: 10px;
-  overflow: hidden;
-  z-index: 2;
-  transition: transform 1s ease;
-}
-
-/* Letter image */
-.letter img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* OPEN STATE */
-.envelope.open .flap {
-  transform: rotateX(180deg);
-}
-
-.envelope.open .letter {
-  transform: translate(-50%, -20%);
+  backface-visibility: hidden;
 }

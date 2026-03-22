@@ -2,33 +2,31 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Envelope Animation</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Envelope</title>
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <div class="envelope">
+<div class="envelope">
 
-    <div class="flap"></div>
+  <!-- Envelope base image -->
+  <img src="assets/image1.jpg" class="envelope-img" alt="Envelope">
 
-    <div class="body">
-      <img src="assets/image1.jpg" alt="Envelope Cover">
-    </div>
+  <!-- Flap (top part) -->
+  <div class="flap"></div>
 
-    <div class="letter">
-      <img src="assets/image2.jpg" alt="Letter Content">
-    </div>
-
+  <!-- Letter inside -->
+  <div class="letter">
+    <img src="assets/image2.jpg" alt="Card">
   </div>
 
-  <!-- Background Music -->
-  <audio id="bgMusic" loop>
-    <source src="assets/music.mp3" type="audio/mpeg">
-  </audio>
+</div>
 
-  <script src="script.js"></script>
+<audio id="bgMusic" src="assets/music.mp3" loop></audio>
+
+<script src="script.js"></script>
 
 </body>
 </html>

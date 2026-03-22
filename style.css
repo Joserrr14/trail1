@@ -60,29 +60,35 @@ html, body {
   z-index: 2;
 }
 
-/* Letter container */
+/* Letter container (fully responsive) */
 .letter {
   position: absolute;
-  top: 100%; /* start below envelope */
+  top: 0;           /* start at top */
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100vw;     /* full viewport width */
+  height: 100vh;    /* full viewport height */
   z-index: 4;
   pointer-events: none;
   display: flex;
   justify-content: center;
   align-items: center;
-  transform: translateY(0);
-  transition: transform 4s cubic-bezier(0.22, 0.61, 0.36, 1); /* slow, smooth for mobile */
+  transform: translateY(100%); /* start below envelope */
+  transition: transform 4s cubic-bezier(0.22, 0.61, 0.36, 1); /* slow smooth slipout on mobile */
 }
 
-/* Letter image fully covers screen */
+/* Letter image fully fits */
 .letter img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  transform: scale(1); /* no zoom on mobile */
+  object-fit: cover; /* mobile: fill screen */
   transition: transform 0.4s ease;
+}
+
+/* Desktop / laptop: fit entire letter without cropping */
+@media (min-width: 768px) {
+  .letter img {
+    object-fit: contain; /* show full letter inside viewport */
+  }
 }
 
 /* Open state */
@@ -91,7 +97,7 @@ html, body {
 }
 
 .envelope.open .letter {
-  transform: translateY(-100%);
+  transform: translateY(0); /* bring letter fully into view */
 }
 
 .envelope.open .blur-bg {

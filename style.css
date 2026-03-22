@@ -1,33 +1,99 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Save the Date</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
+/* Reset */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #2d2d4d;
+}
 
-<div class="envelope" id="envelope">
+/* Envelope container */
+.envelope {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  perspective: 1400px;
+  pointer-events: auto;
+  overflow: hidden;
+}
 
-  <!-- Envelope background -->
-  <div class="body"></div>
+/* Envelope background & flap */
+.body,
+.flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("assets/image1.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  pointer-events: none;
+  z-index: 1;
+}
 
-  <!-- Flap -->
-  <div class="flap"></div>
+.flap {
+  clip-path: polygon(0 0, 100% 0, 85% 45%, 50% 62%, 15% 45%);
+  transform-origin: top center;
+  transition: transform 0.8s ease-in-out;
+  z-index: 3;
+}
 
-  <!-- Blur overlay behind letter -->
-  <div class="blur-bg"></div>
+/* Blur background behind letter */
+.blur-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background: rgba(0,0,0,0.25);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.8s ease-in-out;
+  z-index: 2;
+}
 
-  <!-- Letter -->
-  <div class="letter">
-    <img src="assets/image2.jpg" alt="Save the Date Card">
-  </div>
+/* Letter container */
+.letter {
+  position: absolute;
+  top: 100%; /* start below envelope */
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 4;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: translateY(0);
+  transition: transform 2.5s ease-in-out; /* slow slipout for mobile */
+}
 
-</div>
+/* Letter image fully covers screen */
+.letter img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* full screen */
+  transform: scale(1); /* no zoom by default */
+  transition: transform 0.4s ease;
+}
 
-<audio id="bgMusic" src="assets/music.mp3" loop playsinline></audio>
+/* Open state */
+.envelope.open .flap {
+  transform: rotateX(160deg);
+}
 
-<script src="script.js"></script>
-</body>
-</html>
+.envelope.open .letter {
+  transform: translateY(-100%);
+}
+
+.envelope.open .blur-bg {
+  opacity: 1;
+}

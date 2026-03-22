@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Save the Date</title>
-
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
   <div class="envelope" id="envelope">
@@ -18,12 +16,12 @@
     <!-- Flap -->
     <div class="flap"></div>
 
-    <!-- ✨ Blur overlay (NEW) -->
+    <!-- Blur overlay behind letter -->
     <div class="blur-bg"></div>
 
-    <!-- Letter (fullscreen on open) -->
+    <!-- Letter -->
     <div class="letter">
-      <img src="assets/image2.jpg" alt="Save the Date Card" />
+      <img src="assets/image2.jpg" alt="Save the Date Card">
     </div>
 
   </div>
@@ -31,19 +29,6 @@
   <!-- Background music -->
   <audio id="bgMusic" src="assets/music.mp3" loop playsinline></audio>
 
-  <script>
-    const envelope = document.getElementById("envelope");
-    const music = document.getElementById("bgMusic");
-
-    envelope.addEventListener("click", () => {
-      envelope.classList.toggle("open");
-
-      // Play music on first interaction (iOS safe)
-      if (music.paused) {
-        music.play().catch(() => {});
-      }
-    });
-  </script>
-
+  <script src="script.js"></script>
 </body>
 </html>

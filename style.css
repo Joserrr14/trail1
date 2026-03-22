@@ -1,112 +1,71 @@
-/* Page layout */
+/* Page */
 body {
   margin: 0;
-  min-height: 100vh;
-  background: linear-gradient(135deg, #1e1e2f, #3a3a5f);
+  height: 100vh;
   display: flex;
-  justify-content: center; /* ✅ fixed typo */
+  justify-content: center;
   align-items: center;
-  font-family: Arial, sans-serif;
+  background: #2d2d4d;
 }
 
 /* Envelope container */
 .envelope {
   position: relative;
-  width: min(90vw, 420px);
-  height: min(92vw, 640px);
-  display: flex;
-  justify-content: center; /* ✅ fixed typo */
-  align-items: center;
+  width: 90vw;
+  max-width: 420px;
+  aspect-ratio: 3 / 4; /* keeps shape perfect */
   cursor: pointer;
-  perspective: 1000px;
 }
 
-/* Envelope body (cover image) */
-.body {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  border-radius: 16px;
-  overflow: hidden;
-  z-index: 1;
-}
-
-.body img {
+/* Envelope image fills container */
+.envelope-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 12px;
+  display: block;
 }
 
-/* Flap */
+/* Flap (fake top piece) */
 .flap {
   position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 50%;
-  top: 0;
-  background: #222;
+  background: inherit;
   transform-origin: top;
   transition: transform 0.8s ease;
   z-index: 3;
-  border-top-left-radius: 16px;
-  border-top-right-radius: 16px;
 }
 
-/* Letter (ONLY ONE CLEAN VERSION) */
+/* Letter (hidden inside) */
 .letter {
   position: absolute;
-  width: 90%;
-  height: 90%;
-  left: 5%;
+  left: 50%;
   bottom: 0;
+  transform: translate(-50%, 100%);
+  width: 85%;
+  height: 85%;
   background: white;
-  border-radius: 12px;
+  border-radius: 10px;
   overflow: hidden;
-  transform: translateY(100%);
-  transition: transform 1s ease;
   z-index: 2;
+  transition: transform 1s ease;
 }
 
+/* Letter image */
 .letter img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-/* Open animation */
+/* OPEN STATE */
 .envelope.open .flap {
   transform: rotateX(180deg);
 }
 
 .envelope.open .letter {
-  transform: translateY(-20%);
-}
-
-/* Controls (optional UI) */
-.controls {
-  position: fixed;
-  bottom: 20px;
-  display: flex;
-  gap: 10px;
-  background: rgba(0,0,0,0.4);
-  padding: 10px;
-  border-radius: 12px;
-  backdrop-filter: blur(10px);
-}
-
-.controls button {
-  border: none;
-  padding: 6px 10px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.controls input {
-  width: 100px;
-}
-
-/* Mobile tweaks */
-@media (max-width: 400px) {
-  .envelope {
-    width: 95vw;
-  }
+  transform: translate(-50%, -20%);
 }

@@ -1,41 +1,85 @@
-/* Letter container fills viewport */
-.letter {
+/* Envelope container */
+.envelope {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100dvh; /* dynamic viewport height for iOS Safari */
-  z-index: 4;
-  pointer-events: none;
+  height: 100dvh;
+  cursor: pointer;
+  perspective: 1400px;
   display: flex;
   justify-content: center;
   align-items: center;
-  transform: translateY(100dvh); /* start offscreen */
-  transition: transform 4s cubic-bezier(0.22, 0.61, 0.36, 1);
+  overflow: visible;
 }
 
-/* Base letter image for all devices */
+/* Flap */
+.flap {
+  position: absolute;
+  inset: 0;
+  background: url('assets/image1.jpg') center / cover no-repeat;
+  clip-path: polygon(0 0,100% 0,85% 45%,50% 62%,15% 45%);
+  transform-origin: top center;
+  transition: transform 0.9s cubic-bezier(0.4,0.2,0.2,1);
+  z-index: 3;
+}
+
+/* Envelope body */
+.body {
+  position: absolute;
+  inset: 0;
+  background: url('assets/image1.jpg') center / cover no-repeat;
+  z-index: 1;
+}
+
+/* Blur behind letter */
+.blur-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100dvh;
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  transition: opacity 0.8s ease;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Letter container */
+.letter {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 3s cubic-bezier(0.22,0.61,0.36,1);
+  z-index: 4;
+  pointer-events: none;
+}
+
+/* Letter image base */
 .letter img {
   transition: transform 0.4s ease;
 }
 
-/* Phones / iOS: full cover */
+/* Phones: cover full screen */
 @media (max-width: 767px) {
-  .letter,
-  .letter img {
+  .letter, .letter img {
     width: 100vw;
     height: 100dvh;
     top: 0;
     left: 0;
   }
-
   .letter img {
-    object-fit: cover; /* fully cover iPhone screen */
-    transform: none; /* remove any scaling */
+    object-fit: cover;
+    transform: none;
   }
 }
 
-/* Laptops and larger: contained with margin */
+/* Laptops and desktops: contain inside viewport */
 @media (min-width: 768px) {
   .letter img {
     width: auto;
@@ -48,5 +92,5 @@
 
 /* Open state */
 .envelope.open .letter {
-  transform: translateY(0);
+  transform: translate(-50%, 0);
 }

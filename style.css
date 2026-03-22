@@ -16,10 +16,10 @@ body {
   max-width: 420px;
   aspect-ratio: 3 / 4;
   cursor: pointer;
-  perspective: 1000px;
+  perspective: 1400px; /* better depth */
 }
 
-/* Base envelope (FULL image) */
+/* Base envelope */
 .body {
   position: absolute;
   inset: 0;
@@ -28,34 +28,45 @@ body {
   z-index: 1;
 }
 
-/* Flap (perfectly aligned with body) */
+/* Realistic flap */
 .flap {
   position: absolute;
-  inset: 0; /* EXACT same size as body */
+  inset: 0;
 
-  /* SAME image + SAME positioning = perfect match */
+  /* same image = seamless */
   background: url("assets/image1.jpg") center / cover no-repeat;
 
-  /* Adjust 55% to tweak triangle depth */
-  clip-path: polygon(0 0, 100% 0, 50% 55%);
+  /* more natural envelope shape (not a perfect triangle) */
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    85% 45%,
+    50% 62%,
+    15% 45%
+  );
 
-  transform-origin: top;
-  transition: transform 0.8s ease;
+  transform-origin: top center;
+  transition: transform 0.9s cubic-bezier(0.4, 0.2, 0.2, 1);
   z-index: 3;
   backface-visibility: hidden;
 }
 
-/* Optional: subtle fold shadow for realism */
+/* Fold shading for realism */
 .flap::after {
   content: "";
   position: absolute;
   inset: 0;
-  clip-path: polygon(0 0, 100% 0, 50% 55%);
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.15), transparent);
+  clip-path: inherit;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.25),
+    rgba(0, 0, 0, 0.05) 40%,
+    transparent
+  );
   pointer-events: none;
 }
 
-/* Letter (inside envelope) */
+/* Letter inside */
 .letter {
   position: absolute;
   left: 50%;
@@ -77,9 +88,9 @@ body {
   object-fit: cover;
 }
 
-/* OPEN animation */
+/* Open animation */
 .envelope.open .flap {
-  transform: rotateX(180deg);
+  transform: rotateX(160deg); /* more natural than 180 */
 }
 
 .envelope.open .letter {

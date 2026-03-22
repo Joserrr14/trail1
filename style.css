@@ -1,9 +1,8 @@
-/* Reset & safe area */
 html, body {
   margin: 0;
   padding: 0;
   width: 100%;
-  height: 100svh;
+  height: 100%;
   overflow: hidden;
 }
 
@@ -12,41 +11,34 @@ body {
   justify-content: center;
   align-items: center;
   background: #2d2d4d;
-  padding: env(safe-area-inset-top) env(safe-area-inset-right)
-           env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
 
-/* Envelope container */
 .envelope {
-  position: relative;
-  width: 100%;
-  height: 100svh;
+  position: fixed;
+  inset: 0;
   perspective: 1400px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-/* Background & flap images */
 .body, .flap {
-  position: absolute;
+  position: fixed;
   inset: 0;
   background-image: url("assets/image1.jpg");
   background-position: center;
-  background-repeat: no-repeat;
   background-size: cover;
+  background-repeat: no-repeat;
 }
 
-/* Flap shape */
 .flap {
-  clip-path: polygon(0 0, 100% 0, 85% 45%, 50% 62%, 15% 45%);
+  clip-path: polygon(0 0,100% 0,85% 45%,50% 62%,15% 45%);
   transform-origin: top center;
-  transition: transform 0.9s cubic-bezier(0.4, 0.2, 0.2, 1);
+  transition: transform 0.9s cubic-bezier(0.4,0.2,0.2,1);
   z-index: 3;
   backface-visibility: hidden;
 }
 
-/* Blur overlay behind letter */
 .blur-bg {
   position: fixed;
   inset: 0;
@@ -59,29 +51,22 @@ body {
   transition: opacity 0.6s ease;
 }
 
-/* Letter */
 .letter {
   position: fixed;
   inset: 0;
-  width: 100%;
-  height: 100svh;
-  z-index: 3;
+  z-index: 4;
   transform: translateY(100%);
-  transition: transform 1s ease;
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
 }
 
-/* Letter image fully responsive */
 .letter img {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* covers laptop & mobile */
+  object-fit: cover; /* covers all screen, no clipping */
 }
 
-/* Open state */
 .envelope.open .flap {
   transform: rotateX(160deg);
 }

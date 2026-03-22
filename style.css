@@ -65,7 +65,7 @@ body {
 .letter img {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* covers all screens */
+  object-fit: cover; /* fully covers screen */
 }
 
 .envelope.open .flap {

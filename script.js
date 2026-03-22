@@ -1,105 +1,72 @@
-/* Reset */
-html, body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background: #2d2d4d;
-}
+const envelope = document.getElementById("envelope");
+const flap = document.querySelector(".flap");
+const letter = document.querySelector(".letter");
+const letterImg = document.querySelector(".letter img");
+const blur = document.querySelector(".blur-bg");
+const music = document.getElementById("bgMusic");
 
-/* Envelope container */
-.envelope {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  cursor: pointer;
-  perspective: 1400px;
-  pointer-events: auto;
-  overflow: hidden;
-}
+let isOpen = false;
 
-/* Envelope background & flap */
-.body,
-.flap {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url("assets/image1.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  pointer-events: none;
-  z-index: 1;
-}
+// Detect mobile devices
+const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-.flap {
-  clip-path: polygon(0 0, 100% 0, 85% 45%, 50% 62%, 15% 45%);
-  transform-origin: top center;
-  transition: transform 0.8s ease-in-out;
-  z-index: 3;
-}
+envelope.addEventListener("click", () => {
+  if (!isOpen) openEnvelope();
+  else closeEnvelope();
+});
 
-/* Blur background behind letter */
-.blur-bg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  background: rgba(0,0,0,0.25);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.8s ease-in-out;
-  z-index: 2;
-}
+function openEnvelope() {
+  isOpen = true;
 
-/* Letter container (fully responsive) */
-.letter {
-  position: absolute;
-  top: 0;           /* start at top */
-  left: 0;
-  width: 100vw;     /* full viewport width */
-  height: 100vh;    /* full viewport height */
-  z-index: 4;
-  pointer-events: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transform: translateY(100%); /* start below envelope */
-  transition: transform 4s cubic-bezier(0.22, 0.61, 0.36, 1); /* slow smooth slipout on mobile */
-}
+  flap.style.transform = "rotateX(160deg)";
+  blur.style.opacity = "1";
+  envelope.classList.add("open");
 
-/* Letter image fully fits */
-.letter img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* mobile: fill screen */
-  transition: transform 0.4s ease;
-}
-
-/* Desktop / laptop: fit entire letter without cropping */
-@media (min-width: 768px) {
-  .letter img {
-    object-fit: contain; /* show full letter inside viewport */
+  // Slipout duration: mobile slow, desktop faster
+  if (isMobile) {
+    letter.style.transition = "transform 4s cubic-bezier(0.22, 0.61, 0.36, 1)";
+  } else {
+    letter.style.transition = "transform 1.5s ease-in-out";
   }
+  letter.style.transform = "translateY(0)"; // bring letter fully into view
+
+  // Music starts at 35s
+  if (music.duration > 35) music.currentTime = 35;
+  music.play().catch(() => {});
+
+  // Desktop zoom
+  if (!isMobile) {
+    letterImg.style.transition = "transform 2.5s cubic-bezier(0.22,1,0.36,1)";
+    letterImg.style.transformOrigin = "50% 35%";
+    letterImg.style.transform = "scale(1.25)";
+  } else {
+    letterImg.style.transform = "scale(1)"; // mobile: no zoom
+  }
+
+  if (navigator.vibrate) navigator.vibrate(10);
 }
 
-/* Open state */
-.envelope.open .flap {
-  transform: rotateX(160deg);
-}
+function closeEnvelope() {
+  isOpen = false;
 
-.envelope.open .letter {
-  transform: translateY(0); /* bring letter fully into view */
-}
+  flap.style.transform = "rotateX(0deg)";
+  blur.style.opacity = "0";
 
-.envelope.open .blur-bg {
-  opacity: 1;
+  // Slipback duration
+  if (isMobile) {
+    letter.style.transition = "transform 4s cubic-bezier(0.22, 0.61, 0.36, 1)";
+  } else {
+    letter.style.transition = "transform 1.5s ease-in-out";
+  }
+  letter.style.transform = "translateY(100vh)"; // slide letter fully below viewport
+
+  if (!isMobile) {
+    letterImg.style.transition = "transform 0.4s ease";
+    letterImg.style.transform = "scale(1)";
+  }
+
+  envelope.classList.remove("open");
+
+  music.pause();
+  music.currentTime = 0;
 }

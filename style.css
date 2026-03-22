@@ -1,13 +1,13 @@
 body {
   margin: 0;
   /* Dynamic height for all phones*/
-  height: 100dvh;
+  min-height: 100vh;
   background: linear-gradient(135deg, #1e1e2f, #3a3a5f);
   display: flex;
   justify-content: center;
   align-items: center;
   font-family: Arial, sans-serif;
-  overflow: hidden;
+  overflow: visible;
 }
 
 /* Letter starting position */

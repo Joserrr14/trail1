@@ -1,7 +1,7 @@
 /* Page */
 body {
   margin: 0;
-  height: 100vh;
+  height: 100dvh; /* better for mobile */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -9,14 +9,13 @@ body {
   overflow: hidden;
 }
 
-/* Envelope container */
+/* Envelope container (FULL SCREEN) */
 .envelope {
   position: relative;
-  width: 92vw;
-  max-width: 420px;
-  aspect-ratio: 3 / 4;
+  width: 100vw;
+  height: 100dvh;
   cursor: pointer;
-  perspective: 1400px; /* better depth */
+  perspective: 1400px;
 }
 
 /* Base envelope */
@@ -24,19 +23,18 @@ body {
   position: absolute;
   inset: 0;
   background: url("assets/image1.jpg") center / cover no-repeat;
-  border-radius: 12px;
   z-index: 1;
 }
 
-/* Realistic flap */
+/* Flap */
 .flap {
   position: absolute;
   inset: 0;
 
-  /* same image = seamless */
+  /* SAME image = seamless */
   background: url("assets/image1.jpg") center / cover no-repeat;
 
-  /* more natural envelope shape (not a perfect triangle) */
+  /* realistic flap shape */
   clip-path: polygon(
     0 0,
     100% 0,
@@ -51,7 +49,7 @@ body {
   backface-visibility: hidden;
 }
 
-/* Fold shading for realism */
+/* Flap shading */
 .flap::after {
   content: "";
   position: absolute;
@@ -66,7 +64,7 @@ body {
   pointer-events: none;
 }
 
-/* Letter inside */
+/* Letter */
 .letter {
   position: absolute;
   left: 50%;
@@ -90,16 +88,9 @@ body {
 
 /* Open animation */
 .envelope.open .flap {
-  transform: rotateX(160deg); /* more natural than 180 */
+  transform: rotateX(160deg);
 }
 
 .envelope.open .letter {
   transform: translate(-50%, -20%);
-}
-
-/* Mobile tweak */
-@media (max-width: 400px) {
-  .envelope {
-    width: 96vw;
-  }
 }

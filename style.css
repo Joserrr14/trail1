@@ -1,47 +1,27 @@
+/* Page layout */
 body {
   margin: 0;
-  /* Dynamic height for all phones*/
   min-height: 100vh;
   background: linear-gradient(135deg, #1e1e2f, #3a3a5f);
   display: flex;
-  justify-context: center;
+  justify-content: center; /* ✅ fixed typo */
   align-items: center;
   font-family: Arial, sans-serif;
-  overflow: visible;
-}
-
-/* Letter starting position */
-.letter {
-  position: absolute;
-  left:50%;
-  bottom: -50%;
-  transform: translateX(-50%);
-  width:85%;
-  height: auto;
-  transition: bottom 2s ease;
-}
-
-/*When envelope opens */
-.envelope.open .letter{
-  bottom: 15%;
 }
 
 /* Envelope container */
 .envelope {
   position: relative;
-  /* Responsive sizing*/
   width: min(90vw, 420px);
   height: min(92vw, 640px);
   display: flex;
-  justify-context: center;
+  justify-content: center; /* ✅ fixed typo */
   align-items: center;
-  max-width: none;
-  aspect-ratio: none;
   cursor: pointer;
   perspective: 1000px;
 }
 
-/* Envelope body */
+/* Envelope body (cover image) */
 .body {
   position: absolute;
   width: 100%;
@@ -55,24 +35,6 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-.letter {
-  position: absolute;
-  width: 90%;
-  height: 90%;
-  left: 5%;
-  bottom: 0;
-  background: white;
-  border-radius: 12px;
-  overflow: hidden;
-  transform: translateY(100%);
-  transition: transform 1s ease;
-  z-index: 2;
-}
-
-.envelope.open .letter {
-  transform: translateY(-20%);
-}
 }
 
 /* Flap */
@@ -89,7 +51,7 @@ body {
   border-top-right-radius: 16px;
 }
 
-/* Letter */
+/* Letter (ONLY ONE CLEAN VERSION) */
 .letter {
   position: absolute;
   width: 90%;
@@ -119,7 +81,7 @@ body {
   transform: translateY(-20%);
 }
 
-/* Controls */
+/* Controls (optional UI) */
 .controls {
   position: fixed;
   bottom: 20px;

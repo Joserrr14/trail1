@@ -1,32 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Envelope</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Save the Date</title>
+
+  <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
 
-<div class="envelope">
+  <div class="envelope" id="envelope">
 
-  <!-- Flap (top part of same image) -->
-  <div class="flap"></div>
+    <!-- Envelope background -->
+    <div class="body"></div>
 
-  <!-- Envelope body -->
-  <div class="body"></div>
+    <!-- Flap -->
+    <div class="flap"></div>
 
-  <!-- Letter -->
-  <div class="letter">
-    <img src="assets/image2.jpg" alt="Card">
+    <!-- ✨ Blur overlay (NEW) -->
+    <div class="blur-bg"></div>
+
+    <!-- Letter (fullscreen on open) -->
+    <div class="letter">
+      <img src="assets/image2.jpg" alt="Save the Date Card" />
+    </div>
+
   </div>
 
-</div>
+  <!-- Background music -->
+  <audio id="bgMusic" src="assets/music.mp3" loop playsinline></audio>
 
-<audio id="bgMusic" src="assets/music.mp3" loop></audio>
+  <script>
+    const envelope = document.getElementById("envelope");
+    const music = document.getElementById("bgMusic");
 
-<script src="script.js"></script>
+    envelope.addEventListener("click", () => {
+      envelope.classList.toggle("open");
+
+      // Play music on first interaction (iOS safe)
+      if (music.paused) {
+        music.play().catch(() => {});
+      }
+    });
+  </script>
 
 </body>
 </html>

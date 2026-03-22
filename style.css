@@ -28,24 +28,31 @@ body {
   z-index: 1;
 }
 
-/* REAL flap using SAME image */
+/* Flap (perfectly aligned with body) */
 .flap {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 55%;
+  inset: 0; /* EXACT same size as body */
 
-  /* same image = no dark gap */
-  background: url("assets/image1.jpg") top center / cover no-repeat;
+  /* SAME image + SAME positioning = perfect match */
+  background: url("assets/image1.jpg") center / cover no-repeat;
 
-  /* triangle shape */
-  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  /* Adjust 55% to tweak triangle depth */
+  clip-path: polygon(0 0, 100% 0, 50% 55%);
 
   transform-origin: top;
   transition: transform 0.8s ease;
   z-index: 3;
   backface-visibility: hidden;
+}
+
+/* Optional: subtle fold shadow for realism */
+.flap::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(0 0, 100% 0, 50% 55%);
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.15), transparent);
+  pointer-events: none;
 }
 
 /* Letter (inside envelope) */

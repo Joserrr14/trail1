@@ -37,6 +37,19 @@ function fadeOut(audio, duration = 2000) {
       clearInterval(fade);
     }
   }, interval);
+
+  function openEnvelope() {
+
+    const envelope = document.querySelector(".envelope");
+    const music = document.getElementById("music");
+
+    envelope.classList.add("open");
+
+    music.play().catch(function(error) {
+        console.log("Autoplay blocked:", error);
+    });
+
+}
 }
 
 /* Vibration */

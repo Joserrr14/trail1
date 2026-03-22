@@ -1,0 +1,110 @@
+body {
+  margin: 0;
+  height: 100vh;
+  background: linear-gradient(135deg, #1e1e2f, #3a3a5f);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  overflow: hidden;
+}
+
+/* Envelope container */
+.envelope {
+  position: relative;
+  width: 90vw;
+  max-width: 320px;
+  aspect-ratio: 3 / 4;
+  cursor: pointer;
+  perspective: 1000px;
+}
+
+/* Envelope body */
+.body {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.body img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Flap */
+.flap {
+  position: absolute;
+  width: 100%;
+  height: 50%;
+  top: 0;
+  background: #222;
+  transform-origin: top;
+  transition: transform 0.8s ease;
+  z-index: 3;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+
+/* Letter */
+.letter {
+  position: absolute;
+  width: 90%;
+  height: 90%;
+  left: 5%;
+  bottom: 0;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  transform: translateY(100%);
+  transition: transform 1s ease;
+  z-index: 2;
+}
+
+.letter img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Open animation */
+.envelope.open .flap {
+  transform: rotateX(180deg);
+}
+
+.envelope.open .letter {
+  transform: translateY(-20%);
+}
+
+/* Controls */
+.controls {
+  position: fixed;
+  bottom: 20px;
+  display: flex;
+  gap: 10px;
+  background: rgba(0,0,0,0.4);
+  padding: 10px;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+}
+
+.controls button {
+  border: none;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.controls input {
+  width: 100px;
+}
+
+/* Mobile tweaks */
+@media (max-width: 400px) {
+  .envelope {
+    width: 95vw;
+  }
+}

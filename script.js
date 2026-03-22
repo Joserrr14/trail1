@@ -22,15 +22,19 @@ function openEnvelope() {
   blur.style.opacity = "1";
   envelope.classList.add("open");
 
-  // Slow slipout: desktop faster, mobile slower
-  letter.style.transition = isMobile ? "transform 2.5s ease-in-out" : "transform 1.5s ease-in-out";
+  // Slow, smooth slipout
+  if (isMobile) {
+    letter.style.transition = "transform 4s cubic-bezier(0.22, 0.61, 0.36, 1)"; // ultra smooth mobile
+  } else {
+    letter.style.transition = "transform 1.5s ease-in-out"; // desktop faster
+  }
   letter.style.transform = "translateY(-100%)";
 
   // Music starts at 35s
   if (music.duration > 35) music.currentTime = 35;
   music.play().catch(() => {});
 
-  // Only zoom on desktop
+  // Zoom only on desktop
   if (!isMobile) {
     letterImg.style.transition = "transform 2.5s cubic-bezier(0.22,1,0.36,1)";
     letterImg.style.transformOrigin = "50% 35%";
@@ -48,7 +52,11 @@ function closeEnvelope() {
   flap.style.transform = "rotateX(0deg)";
   blur.style.opacity = "0";
 
-  letter.style.transition = isMobile ? "transform 2.5s ease-in-out" : "transform 1.5s ease-in-out";
+  if (isMobile) {
+    letter.style.transition = "transform 4s cubic-bezier(0.22, 0.61, 0.36, 1)";
+  } else {
+    letter.style.transition = "transform 1.5s ease-in-out";
+  }
   letter.style.transform = "translateY(0)";
 
   if (!isMobile) {

@@ -22,23 +22,23 @@ function openEnvelope() {
   blur.style.opacity = "1";
   envelope.classList.add("open");
 
-  // Smooth slipout
+  // Slipout duration: mobile slow, desktop faster
   letter.style.transition = isMobile
     ? "transform 4s cubic-bezier(0.22, 0.61, 0.36, 1)"
     : "transform 1.5s ease-in-out";
-  letter.style.transform = "translateY(0)";
+  letter.style.transform = "translateY(0)"; // slide into view
 
-  // Start music at 35s
+  // Music at 35s
   if (music.duration > 35) music.currentTime = 35;
   music.play().catch(() => {});
 
-  // Zoom for desktop, none for mobile
+  // Desktop zoom only
   if (!isMobile) {
     letterImg.style.transition = "transform 2.5s cubic-bezier(0.22,1,0.36,1)";
     letterImg.style.transformOrigin = "50% 50%";
     letterImg.style.transform = "scale(1.1)";
   } else {
-    letterImg.style.transform = "scale(1)";
+    letterImg.style.transform = "scale(1)"; // mobile: no zoom
   }
 
   if (navigator.vibrate) navigator.vibrate(10);

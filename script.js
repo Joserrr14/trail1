@@ -5,12 +5,10 @@ const letterImg = document.querySelector(".letter img");
 const music = document.getElementById("bgMusic");
 
 let isOpen = false;
-let motionEnabled = false;
 
 const ZOOM_SCALE = 1.25;
 const ZOOM_X = 50;
 const ZOOM_Y = 35;
-const TILT_STRENGTH = 12;
 
 envelope.addEventListener("click", () => {
   if(!isOpen) openEnvelope();
@@ -34,9 +32,6 @@ function openEnvelope() {
 
   // Auto zoom
   setTimeout(startZoom, 500);
-
-  // Parallax tilt
-  enableMotion();
 }
 
 function closeEnvelope() {
@@ -63,26 +58,4 @@ function startZoom(){
   letterImg.style.transition = "transform 2.5s cubic-bezier(0.22,1,0.36,1)";
   letterImg.style.transformOrigin = `${ZOOM_X}% ${ZOOM_Y}%`;
   letterImg.style.transform = `scale(${ZOOM_SCALE})`;
-}
-
-function enableMotion(){
-  if(motionEnabled) return;
-
-  if(typeof DeviceOrientationEvent !== "undefined" &&
-    typeof DeviceOrientationEvent.requestPermission === "function") {
-    DeviceOrientationEvent.requestPermission()
-      .then(resp => { if(resp==="granted") startParallax(); })
-      .catch(()=>{});
-  } else startParallax();
-
-  motionEnabled = true;
-}
-
-function startParallax(){
-  window.addEventListener("deviceorientation", e=>{
-    if(!isOpen) return;
-    const rotateX = (e.beta/45)*TILT_STRENGTH;
-    const rotateY = (e.gamma/45)*TILT_STRENGTH;
-    letter.style.transform = `translateY(0%) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-  });
 }

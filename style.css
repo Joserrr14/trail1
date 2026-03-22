@@ -1,3 +1,4 @@
+/* Reset */
 html, body {
   margin: 0;
   padding: 0;
@@ -17,29 +18,27 @@ body {
   position: fixed;
   inset: 0;
   perspective: 1400px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer; /* indicate clickable */
+  cursor: pointer;
 }
 
+/* Envelope background & flap */
 .body, .flap {
   position: fixed;
   inset: 0;
   background-image: url("assets/image1.jpg");
-  background-position: center;
   background-size: cover;
+  background-position: center;
   background-repeat: no-repeat;
 }
 
 .flap {
-  clip-path: polygon(0 0,100% 0,85% 45%,50% 62%,15% 45%);
+  clip-path: polygon(0 0, 100% 0, 85% 45%, 50% 62%, 15% 45%);
   transform-origin: top center;
   transition: transform 0.9s cubic-bezier(0.4,0.2,0.2,1);
   z-index: 3;
-  backface-visibility: hidden;
 }
 
+/* Blur overlay behind letter */
 .blur-bg {
   position: fixed;
   inset: 0;
@@ -52,22 +51,25 @@ body {
   transition: opacity 0.6s ease;
 }
 
+/* Letter container */
 .letter {
   position: fixed;
   inset: 0;
   z-index: 4;
-  transform: translateY(100%);
   display: flex;
   justify-content: center;
   align-items: center;
+  transform: translateY(100%);
 }
 
+/* Letter image fully responsive, no cropping */
 .letter img {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* fully covers screen */
+  object-fit: contain; /* ensures entire letter fits on screen */
 }
 
+/* Open state */
 .envelope.open .flap {
   transform: rotateX(160deg);
 }

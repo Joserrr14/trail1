@@ -6,10 +6,7 @@ const music = document.getElementById("bgMusic");
 
 let isOpen = false;
 
-const ZOOM_SCALE = 1.25;
-const ZOOM_X = 50;
-const ZOOM_Y = 35;
-
+// Open/close on click anywhere
 envelope.addEventListener("click", () => {
   if(!isOpen) openEnvelope();
   else closeEnvelope();
@@ -28,10 +25,8 @@ function openEnvelope() {
   if(music.duration > 35) music.currentTime = 35;
   music.play().catch(()=>{});
 
+  // Vibrate for tactile feedback
   if(navigator.vibrate) navigator.vibrate(10);
-
-  // Auto zoom
-  setTimeout(startZoom, 500);
 }
 
 function closeEnvelope() {
@@ -43,19 +38,9 @@ function closeEnvelope() {
   flap.style.transform = "rotateX(0deg)";
   letter.style.transform = "translateY(100%)";
 
-  letterImg.style.transition = "transform 0.4s ease";
-  letterImg.style.transform = "scale(1)";
-  letterImg.style.transformOrigin = "center";
-
   envelope.classList.remove("open");
 
   // Stop music
   music.pause();
   music.currentTime = 0;
-}
-
-function startZoom(){
-  letterImg.style.transition = "transform 2.5s cubic-bezier(0.22,1,0.36,1)";
-  letterImg.style.transformOrigin = `${ZOOM_X}% ${ZOOM_Y}%`;
-  letterImg.style.transform = `scale(${ZOOM_SCALE})`;
 }

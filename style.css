@@ -10,6 +10,22 @@ body {
   overflow: hidden;
 }
 
+/* Letter starting position */
+.letter {
+  position: absolute;
+  left:50%;
+  bottom: -50%;
+  transform: translateX(-50%);
+  width:85%;
+  height: auto;
+  transition: bottom 2s ease;
+}
+
+/*When envelope opens */
+.envelope.open .letter{
+  bottom: 15%;
+}
+
 /* Envelope container */
 .envelope {
   position: relative;

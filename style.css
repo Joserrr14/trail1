@@ -1,10 +1,10 @@
-/* Reset */
+/* Reset & safe area */
 html, body {
   margin: 0;
   padding: 0;
   width: 100%;
-  height: auto;
-  overflow-x: hidden;
+  height: 100svh;
+  overflow: hidden;
 }
 
 body {
@@ -12,29 +12,23 @@ body {
   justify-content: center;
   align-items: center;
   background: #2d2d4d;
-  min-height: 100svh;
-
-  padding: env(safe-area-inset-top)
-           env(safe-area-inset-right)
-           env(safe-area-inset-bottom)
-           env(safe-area-inset-left);
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+           env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
 
 /* Envelope container */
 .envelope {
   position: relative;
   width: 100%;
-  min-height: 100svh;
+  height: 100svh;
   perspective: 1400px;
-
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-/* Background (auto-switch) */
-.body,
-.flap {
+/* Background & flap images */
+.body, .flap {
   position: absolute;
   inset: 0;
   background-image: url("assets/image1.jpg");
@@ -43,104 +37,59 @@ body {
   background-size: cover;
 }
 
-/* 📱 Phones → no crop */
-@media (max-aspect-ratio: 3/4) {
-  .body,
-  .flap {
-    background-size: contain;
-  }
-}
-
-/* 💻 Desktop → immersive */
-@media (min-aspect-ratio: 4/3) {
-  .body,
-  .flap {
-    background-size: cover;
-  }
-}
-
-/* Flap */
+/* Flap shape */
 .flap {
-  clip-path: polygon(
-    0 0,
-    100% 0,
-    85% 45%,
-    50% 62%,
-    15% 45%
-  );
-
+  clip-path: polygon(0 0, 100% 0, 85% 45%, 50% 62%, 15% 45%);
   transform-origin: top center;
   transition: transform 0.9s cubic-bezier(0.4, 0.2, 0.2, 1);
   z-index: 3;
   backface-visibility: hidden;
 }
 
-/* ✨ BLUR OVERLAY */
+/* Blur overlay behind letter */
 .blur-bg {
   position: fixed;
   inset: 0;
   z-index: 2;
-
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-
-  background: rgba(0, 0, 0, 0.25); /* subtle dark tint */
+  background: rgba(0,0,0,0.25);
   opacity: 0;
   pointer-events: none;
-
   transition: opacity 0.6s ease;
 }
 
-/* Letter (fullscreen) */
+/* Letter */
 .letter {
   position: fixed;
   inset: 0;
   width: 100%;
   height: 100svh;
-
   z-index: 3;
-
   transform: translateY(100%);
   transition: transform 1s ease;
-
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
 }
 
-/* Letter image */
+/* Letter image fully responsive */
 .letter img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover; /* covers laptop & mobile */
 }
 
-/* 📱 Phones */
-@media (max-aspect-ratio: 3/4) {
-  .letter img {
-    object-fit: contain;
-  }
-}
-
-/* 💻 Desktop */
-@media (min-aspect-ratio: 4/3) {
-  .letter img {
-    object-fit: cover;
-  }
-}
-
-/* OPEN STATE */
+/* Open state */
 .envelope.open .flap {
   transform: rotateX(160deg);
 }
 
-/* Slide letter up */
 .envelope.open .letter {
   transform: translateY(0);
 }
 
-/* Fade in blur */
 .envelope.open .blur-bg {
   opacity: 1;
 }

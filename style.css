@@ -1,57 +1,66 @@
-/* Reset & safe area */
+/* Reset */
 html, body {
   margin: 0;
   padding: 0;
   width: 100%;
-  height: auto; /* allow content to grow */
-  overflow-x: hidden; /* prevent sideways scroll */
+  height: auto;
+  overflow-x: hidden;
 }
 
-/* Body layout */
 body {
   display: flex;
   justify-content: center;
   align-items: center;
   background: #2d2d4d;
-  min-height: 100svh; /* better than 100dvh for iOS stability */
+  min-height: 100svh;
 
-  padding-top: env(safe-area-inset-top);
-  padding-bottom: env(safe-area-inset-bottom);
-  padding-left: env(safe-area-inset-left);
-  padding-right: env(safe-area-inset-right);
+  padding: env(safe-area-inset-top)
+           env(safe-area-inset-right)
+           env(safe-area-inset-bottom)
+           env(safe-area-inset-left);
 }
 
 /* Envelope container */
 .envelope {
-  position: relative; /* was fixed → caused layout issues */
+  position: relative;
   width: 100%;
   min-height: 100svh;
-  cursor: pointer;
   perspective: 1400px;
 
   display: flex;
   justify-content: center;
   align-items: center;
-
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
 }
 
-/* Base envelope */
-.body {
+/* Background (auto-switch) */
+.body,
+.flap {
   position: absolute;
   inset: 0;
-  background: url("assets/image1.jpg") center / contain no-repeat;
-  /* 👆 changed from cover → contain (prevents cropping) */
-  z-index: 1;
+  background-image: url("assets/image1.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/* 📱 Phones → no crop */
+@media (max-aspect-ratio: 3/4) {
+  .body,
+  .flap {
+    background-size: contain;
+  }
+}
+
+/* 💻 Desktop → immersive */
+@media (min-aspect-ratio: 4/3) {
+  .body,
+  .flap {
+    background-size: cover;
+  }
 }
 
 /* Flap */
 .flap {
-  position: absolute;
-  inset: 0;
-  background: url("assets/image1.jpg") center / contain no-repeat;
-
   clip-path: polygon(
     0 0,
     100% 0,
@@ -66,57 +75,72 @@ body {
   backface-visibility: hidden;
 }
 
-/* Flap shading */
-.flap::after {
-  content: "";
-  position: absolute;
+/* ✨ BLUR OVERLAY */
+.blur-bg {
+  position: fixed;
   inset: 0;
-  clip-path: inherit;
-  background: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0.25),
-    rgba(0, 0, 0, 0.05) 40%,
-    transparent
-  );
-  pointer-events: none;
-}
-
-/* Letter */
-.letter {
-  position: absolute;
-  left: 50%;
-  bottom: 0;
-  transform: translate(-50%, 100%);
-  width: 90%;
-  max-width: 500px;
-
-  background: white;
-  border-radius: 12px;
-  overflow: visible; /* allow full image */
-
   z-index: 2;
-  transition: transform 1s ease;
+
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  background: rgba(0, 0, 0, 0.25); /* subtle dark tint */
+  opacity: 0;
+  pointer-events: none;
+
+  transition: opacity 0.6s ease;
 }
 
-/* Letter image (FIXED) */
+/* Letter (fullscreen) */
+.letter {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100svh;
+
+  z-index: 3;
+
+  transform: translateY(100%);
+  transition: transform 1s ease;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* Letter image */
 .letter img {
   width: 100%;
-  height: auto; /* ✅ fixed */
-  display: block;
+  height: 100%;
+  object-fit: contain;
 }
 
-/* Open animation */
+/* 📱 Phones */
+@media (max-aspect-ratio: 3/4) {
+  .letter img {
+    object-fit: contain;
+  }
+}
+
+/* 💻 Desktop */
+@media (min-aspect-ratio: 4/3) {
+  .letter img {
+    object-fit: cover;
+  }
+}
+
+/* OPEN STATE */
 .envelope.open .flap {
   transform: rotateX(160deg);
 }
 
+/* Slide letter up */
 .envelope.open .letter {
-  transform: translate(-50%, -10%);
+  transform: translateY(0);
 }
 
-/* Mobile tweaks */
-@media (max-width: 500px) {
-  .letter {
-    width: 95%;
-  }
+/* Fade in blur */
+.envelope.open .blur-bg {
+  opacity: 1;
 }

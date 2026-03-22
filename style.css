@@ -5,68 +5,83 @@ html, body {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  font-family: sans-serif;
   background: #2d2d4d;
 }
 
-/* Envelope container */
+/* Envelope clickable container */
 .envelope {
-  position: fixed;
-  inset: 0;
-  perspective: 1400px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   cursor: pointer;
-  pointer-events: auto; /* ensure envelope receives clicks */
+  perspective: 1400px;
+  pointer-events: auto;
+  overflow: hidden;
 }
 
-/* Envelope background & flap */
+/* Envelope background */
 .body,
 .flap {
-  position: fixed;
-  inset: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background-image: url("assets/image1.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  pointer-events: none; /* children don’t block clicks */
+  pointer-events: none;
+  z-index: 1;
 }
 
+/* Flap shape */
 .flap {
   clip-path: polygon(0 0, 100% 0, 85% 45%, 50% 62%, 15% 45%);
   transform-origin: top center;
-  transition: transform 0.9s cubic-bezier(0.4,0.2,0.2,1);
+  transition: transform 0.6s ease-in-out;
   z-index: 3;
 }
 
-/* Blur overlay behind letter */
+/* Blur background behind letter */
 .blur-bg {
-  position: fixed;
-  inset: 0;
-  z-index: 2;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   background: rgba(0,0,0,0.25);
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.6s ease;
+  z-index: 2;
 }
 
 /* Letter container */
 .letter {
-  position: fixed;
-  inset: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   z-index: 4;
+  opacity: 0;
+  pointer-events: none;
   display: flex;
   justify-content: center;
   align-items: center;
-  transform: translateY(100%);
-  pointer-events: none; /* don’t block clicks */
+  transition: opacity 0.8s ease-in-out;
 }
 
-/* Letter image fully responsive, no cropping */
+/* Letter image fully covers the screen */
 .letter img {
   width: 100%;
   height: 100%;
-  object-fit: contain; /* entire letter fits on screen */
+  object-fit: cover;
 }
 
 /* Open state */
@@ -75,7 +90,7 @@ html, body {
 }
 
 .envelope.open .letter {
-  transform: translateY(0);
+  opacity: 1;
 }
 
 .envelope.open .blur-bg {

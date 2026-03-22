@@ -9,18 +9,24 @@
 
 <body>
 
-<div class="envelope" onclick="envelope">
-  <!-- Envelope image -->
-  <im scr="envelope.png" class="body">
-  <im scr="save-the-date.png" class="letter" id="letter">
+<div class="envelope" onclick="openEnvelope()">
+
+  <div class="flap"></div>
+
+  <div class="body">
+    <img src="assets/image1.jpg" alt="Envelope Cover">
   </div>
 
-    <!-- Music -->
-    <audio id="music" loop>
-      <source src="music.mp3" type="audio/mpeg">
-    </audio>
-    <script src="scrpit.js"></script>
-  <body>
+  <div class="letter">
+    <img src="assets/image2.jpg" alt="Letter Content">
+  </div>
+
+</div>
+
+<audio id="bgMusic" src="assets/music.mp3" loop></audio>
+
+<script src="script.js"></script>
+</body>
   
   <div class="flap"></div>
 

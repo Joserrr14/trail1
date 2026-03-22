@@ -7,7 +7,7 @@ const music = document.getElementById("bgMusic");
 
 let isOpen = false;
 
-// Simple mobile check
+// Detect mobile
 const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
 envelope.addEventListener("click", () => {
@@ -19,9 +19,12 @@ function openEnvelope() {
   isOpen = true;
 
   flap.style.transform = "rotateX(160deg)";
-  letter.style.opacity = "1";
   blur.style.opacity = "1";
   envelope.classList.add("open");
+
+  // slow slipout of letter
+  letter.style.transition = "transform 1.5s ease-in-out";
+  letter.style.transform = "translateY(-100%)";
 
   // Music starts at 35s
   if (music.duration > 35) music.currentTime = 35;
@@ -41,15 +44,16 @@ function closeEnvelope() {
   isOpen = false;
 
   flap.style.transform = "rotateX(0deg)";
-  letter.style.opacity = "0";
   blur.style.opacity = "0";
-  envelope.classList.remove("open");
+  letter.style.transform = "translateY(0)"; // slide letter back down
 
   // Reset zoom on desktop
   if (!isMobile) {
     letterImg.style.transition = "transform 0.4s ease";
     letterImg.style.transform = "scale(1)";
   }
+
+  envelope.classList.remove("open");
 
   music.pause();
   music.currentTime = 0;

@@ -1,41 +1,41 @@
-/* Letter container: always fill viewport */
+/* Letter container fills viewport */
 .letter {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+  height: 100dvh; /* dynamic viewport height for iOS Safari */
   z-index: 4;
   pointer-events: none;
   display: flex;
   justify-content: center;
   align-items: center;
-  transform: translateY(100vh); /* start offscreen */
+  transform: translateY(100dvh); /* start offscreen */
   transition: transform 4s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
-/* Letter image base */
+/* Base letter image for all devices */
 .letter img {
   transition: transform 0.4s ease;
 }
 
-/* Phones only: cover full screen */
+/* Phones / iOS: full cover */
 @media (max-width: 767px) {
   .letter,
   .letter img {
     width: 100vw;
-    height: 100vh;
+    height: 100dvh;
     top: 0;
     left: 0;
   }
 
   .letter img {
-    object-fit: cover;
+    object-fit: cover; /* fully cover iPhone screen */
     transform: none; /* remove any scaling */
   }
 }
 
-/* Laptops and above: contained with margin */
+/* Laptops and larger: contained with margin */
 @media (min-width: 768px) {
   .letter img {
     width: auto;
